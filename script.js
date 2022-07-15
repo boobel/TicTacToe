@@ -1,16 +1,6 @@
 const fieldElements = document.querySelectorAll(".field");
 
 
-const playerFactory = (mark) => {
-    this.mark = mark;
-
-  const getMark = () => {
-    return mark;
-  };
-
-  return { getMark };
-};
-
 const gameBoard = (() => {
     var board = ['','','','','','','','','']; 
 
@@ -22,6 +12,7 @@ const gameBoard = (() => {
         fieldElements.forEach((field) => {
             field.innerHTML = '';
         });
+        displayController.result.innerHTML = '';
     };
 
     return {board, reset};
@@ -30,14 +21,15 @@ const gameBoard = (() => {
 const gameController = (() => { 
 
     const checkWinner = (mark) => {
-        return ((gameBoard.board[0]=== mark)&&((gameBoard.board[0]===gameBoard.board[1])&&(gameBoard.board[0]===gameBoard.board[2]))||
-            (gameBoard.board[3]=== mark)&&((gameBoard.board[3]===gameBoard.board[4])&&(gameBoard.board[3]===gameBoard.board[5]))||
-            (gameBoard.board[6]=== mark)&&((gameBoard.board[6]===gameBoard.board[7])&&(gameBoard.board[6]===gameBoard.board[8]))||
-            (gameBoard.board[0]=== mark)&&((gameBoard.board[0]===gameBoard.board[3])&&(gameBoard.board[0]===gameBoard.board[6]))||
-            (gameBoard.board[1]=== mark)&&((gameBoard.board[1]===gameBoard.board[4])&&(gameBoard.board[1]===gameBoard.board[7]))||
-            (gameBoard.board[2]=== mark)&&((gameBoard.board[2]===gameBoard.board[5])&&(gameBoard.board[2]===gameBoard.board[8]))||
-            (gameBoard.board[0]=== mark)&&((gameBoard.board[0]===gameBoard.board[4])&&(gameBoard.board[0]===gameBoard.board[8]))||
-            (gameBoard.board[2]=== mark)&&((gameBoard.board[0]===gameBoard.board[4])&&(gameBoard.board[0]===gameBoard.board[6])));    
+        return (((gameBoard.board[0]===mark)&&(gameBoard.board[1]===mark)&&(gameBoard.board[2]===mark))||
+        ((gameBoard.board[3]===mark)&&(gameBoard.board[4]===mark)&&(gameBoard.board[5]===mark))||
+        ((gameBoard.board[6]===mark)&&(gameBoard.board[7]===mark)&&(gameBoard.board[8]===mark))||
+        ((gameBoard.board[0]===mark)&&(gameBoard.board[3]===mark)&&(gameBoard.board[6]===mark))||
+        ((gameBoard.board[1]===mark)&&(gameBoard.board[4]===mark)&&(gameBoard.board[7]===mark))||
+        ((gameBoard.board[2]===mark)&&(gameBoard.board[5]===mark)&&(gameBoard.board[8]===mark))||
+        ((gameBoard.board[0]===mark)&&(gameBoard.board[4]===mark)&&(gameBoard.board[8]===mark))||
+        ((gameBoard.board[2]===mark)&&(gameBoard.board[4]===mark)&&(gameBoard.board[6]===mark))
+        );
     };
 
     const checkDraw = () => {
@@ -58,7 +50,10 @@ const displayController = (() => {
     const resetBtn = document.querySelector('#restart-button');
     const result = document.querySelector('#result');
     turn.innerHTML = 'X';
-    let isWinnerO, isWinnerX = false;
+    let isWinnerO = false;
+    let isWinnerX = false;
+    let isDraw = false;
+    
 
     resetBtn.addEventListener('click', gameBoard.reset)
 
@@ -66,17 +61,18 @@ const displayController = (() => {
 
     fieldElements.forEach((field) => {
         field.addEventListener('click', () => {
-            if(field.innerHTML === '' && (turnIndex === 0 || turnIndex === 0)) {
+            if(field.innerHTML === '' && (turnIndex === 0)) {
                 field.innerHTML = 'X';
                 gameBoard.board[field.dataset.index] = field.innerHTML;
                 turnIndex = 1;
                 turn.innerHTML = 'O';
-                if(gameController.checkWinner('X') === true) {
-                    console.log('X wins');
-                    isWinnerX = true;
+                if((displayController.isWinnerO===false)&&(displayController.isWinnerX===false)&&(gameController.checkWinner('X') === true)) {
+                    displayController.isWinnerX = true;
+                    result.innerHTML = 'Player X wins!'
                 }
-                if(gameController.checkDraw() === true) {
-                    console.log('Draw');
+                if((displayController.isWinnerO===false)&&(displayController.isWinnerX===false)&&(gameController.checkDraw() === true)) {
+                    displayController.isDraw = true;
+                    result.innerHTML = 'Draw'
                 }
             }
             else if (field.innerHTML === '' && turnIndex === 1){
@@ -84,27 +80,19 @@ const displayController = (() => {
                 gameBoard.board[field.dataset.index] = field.innerHTML;
                 turnIndex = 0;
                 turn.innerHTML = 'X';
-                if(gameController.checkWinner('O') === true) {
-                    console.log('O wins');
-                    isWinnerO = true;
+                if((displayController.isWinnerX===false)&&(displayController.isWinnerO===false)&&(gameController.checkWinner('O') === true)) {
+                    displayController.isWinnerO = true;
+                    result.innerHTML = 'Player O wins!'
                 }
-                if(gameController.checkDraw() === true) {
-                    console.log('Draw');
+                if((displayController.isWinnerX===false)&&(displayController.isWinnerO === false)&&(gameController.checkDraw() === true)) {
+                    displayController.isDraw = true;
+                    result.innerHTML = 'Draw!'
                 }
             };
         });
     });
 
-    const displayResult = (()=> {
-        if(isWinnerX === true) {
-            result.innerHTML = 'Player X won!'
-        }
-        else if(isWinnerO === true) {
-            result.innerHTML = 'Player O won!'
-        }
-    })();
 
-    return {fieldElements, isWinnerO, isWinnerX, displayResult}
+    return {fieldElements, isWinnerO, isWinnerX, result}
 })();
-
 
