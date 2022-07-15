@@ -12,7 +12,12 @@ const gameBoard = (() => {
         fieldElements.forEach((field) => {
             field.innerHTML = '';
         });
-        displayController.result.innerHTML = '';
+        if(displayController.result.innerHTML !== ''){
+            displayController.result.innerHTML = ''
+        }
+        displayController.isWinnerO = false;
+        displayController.isWinnerX = false;
+        displayController.sDraw = false;
     };
 
     return {board, reset};
@@ -55,8 +60,6 @@ const displayController = (() => {
     let isDraw = false;
     
 
-    resetBtn.addEventListener('click', gameBoard.reset)
-
     
 
     fieldElements.forEach((field) => {
@@ -92,6 +95,7 @@ const displayController = (() => {
         });
     });
 
+    resetBtn.addEventListener('click', gameBoard.reset)
 
     return {fieldElements, isWinnerO, isWinnerX, result}
 })();

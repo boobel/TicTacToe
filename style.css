@@ -1,14 +1,17 @@
 html {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
 }
 
 body {
     margin: 0;
+    background-color: grey;
 }
 
 header {
+    color: black;
     text-align: center;
-    background-color: gainsboro;
+    background-color: rgb(255, 242, 62);
     padding: 5vh;
     font-size: 7vh;
 }
@@ -35,4 +38,21 @@ header {
     font-size: 8vh;
 
 
+}
+
+.field:hover {
+    background-color: rgb(255, 242, 62);
+}
+
+#restart-button {
+    background-color: rgb(255, 242, 62);
+    padding: 1.5vh;
+    border-radius: 15px;
+    font-size: 3vh;
+    border: none;
+}
+
+#restart-button:active {
+    position: relative;
+    top: 5px;
 }
